@@ -69,14 +69,18 @@ export function CreateFolderModal({ open, onClose, onCreated }: Props) {
       const domainList = domains.split(',').map((d) => d.trim().toLowerCase()).filter(Boolean)
       const keywordList = keywords.split(',').map((k) => k.trim()).filter(Boolean)
       if (!label) return setErr('Give your folder a name.')
-      if (domainList.length === 0 && keywordList.length === 0)
-        return setErr('Add at least one sender domain or keyword to match.')
+      // Domain/keyword are optional now — a name is enough to add a folder
+      // directly. With neither rule given we match the folder name as a keyword,
+      // so the folder still collects related mail out of the box.
+      const domainsFinal = domainList
+      const keywordsFinal = domainList.length === 0 && keywordList.length === 0 ? [label] : keywordList
+      const matched = [...domainsFinal, ...keywordsFinal].slice(0, 3).join(', ')
       input = {
         label,
         icon: icon || '📁',
         accent,
-        description: `Matches ${[...domainList, ...keywordList].slice(0, 3).join(', ')}`,
-        rule: { domains: domainList, keywords: keywordList },
+        description: matched ? `Matches ${matched}` : label,
+        rule: { domains: domainsFinal, keywords: keywordsFinal },
       }
     } else if (template) {
       input = {
@@ -198,18 +202,18 @@ export function CreateFolderModal({ open, onClose, onCreated }: Props) {
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium">Match sender domains</label>
+              <label className="mb-1.5 block text-sm font-medium">Match sender domains <span className="font-normal text-slate-400">(optional)</span></label>
               <input
                 value={domains}
                 onChange={(e) => setDomains(e.target.value)}
                 placeholder="medium.com, substack.com"
                 className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-800"
               />
-              <p className="mt-1 text-xs text-slate-400">Comma-separated. Sub-domains match automatically.</p>
+              <p className="mt-1 text-xs text-slate-400">Comma-separated. Sub-domains match automatically. Leave blank to match by name.</p>
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium">…or match keywords</label>
+              <label className="mb-1.5 block text-sm font-medium">…or match keywords <span className="font-normal text-slate-400">(optional)</span></label>
               <input
                 value={keywords}
                 onChange={(e) => setKeywords(e.target.value)}
