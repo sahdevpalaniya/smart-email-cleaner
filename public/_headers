@@ -1,0 +1,24 @@
+# Security headers for static hosts that read a `_headers` file
+# (Netlify, Cloudflare Pages). For other hosts, set the equivalent response
+# headers at the server/CDN. These are intentionally NOT meta tags because a
+# strict CSP meta tag would break Vite's dev server.
+/*
+  # Lock the app into HTTPS for 2 years (enable only once you serve over HTTPS).
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  # No MIME sniffing.
+  X-Content-Type-Options: nosniff
+  # Don't leak full URLs to third parties.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Disallow being framed (clickjacking) — reinforced by CSP frame-ancestors.
+  X-Frame-Options: DENY
+  # Drop powerful features we never use.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  # Content Security Policy — only the origins this app actually talks to.
+  #   script-src   : app bundle (self) + Google Identity Services
+  #   connect-src  : Gmail REST + batch + Google OAuth/userinfo, plus https: so
+  #                  one-click unsubscribe can POST to any sender's endpoint
+  #   frame-src    : GIS renders its consent/token flow in a Google iframe
+  #   img-src      : Google profile avatars (+ data: for inline SVG)
+  #   style-src    : 'unsafe-inline' is required for the few inline style attrs
+  #   font-src     : Google Fonts files
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://accounts.google.com https://apis.google.com; connect-src 'self' https: https://gmail.googleapis.com https://www.googleapis.com https://accounts.google.com; frame-src https://accounts.google.com https://content.googleapis.com; img-src 'self' data: https://*.googleusercontent.com https://lh3.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com

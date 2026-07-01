@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Smart Email Cleaner — categorize, organize and bulk-clean your Gmail inbox." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Identity Services (OAuth token client) -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Google AdSense (publisher ID injected from VITE_ADSENSE_CLIENT at build time) -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=%VITE_ADSENSE_CLIENT%"
+      crossorigin="anonymous"
+    ></script>
+    <title>Smart Email Cleaner</title>
+    <!-- Apply the theme before first paint so dark mode (the default) never
+         flashes white. Mirrors getInitialTheme(): stored choice wins, else dark. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('sec-theme')
+          if (t !== 'light') document.documentElement.classList.add('dark')
+        } catch (e) {
+          document.documentElement.classList.add('dark')
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

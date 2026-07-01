@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection {
+    @apply bg-brand-500/25;
+  }
+  /* Consistent, professional focus ring for keyboard users only. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500/50 ring-offset-2 ring-offset-white dark:ring-offset-slate-950;
+  }
+}
+
+@layer components {
+  /* Container for sanitized, untrusted email HTML rendered in the reader modal.
+     Keeps wide images/tables from breaking the layout and gives links/text sane
+     defaults; the email's own (DOMPurify-cleaned) inline styles still apply. */
+  .email-body {
+    @apply break-words text-sm leading-relaxed text-slate-700 dark:text-slate-200;
+    overflow-x: auto;
+  }
+  .email-body img,
+  .email-body table,
+  .email-body video {
+    max-width: 100%;
+    height: auto;
+  }
+  .email-body a {
+    @apply text-brand-600 underline dark:text-brand-400;
+  }
+  .email-body p {
+    @apply my-2;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(148 163 184 / 0.5) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-300 dark:bg-slate-700;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
